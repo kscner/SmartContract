@@ -3,7 +3,7 @@ pragma solidity ^0.4.25;
 contract MyContract {
     address creator;
     struct Player{
-      bytes32 plaintext;//0:none a:剪刀 b：石头 c：布
+      bytes32 plaintext;//0:none 1:剪刀 2：石头 3：布
       bytes32 ciphertext;
       int status;//0:undefind 1:waiting 2:finished
     }
@@ -15,7 +15,6 @@ contract MyContract {
         player1.status = 0;
         player2.status = 0;
     }
-    //加入游戏
     function start(bytes32 ciphertext) payable public{
       if(player1.status!=0){
           emit MyEvent("Player1 can not start");
@@ -25,21 +24,19 @@ contract MyContract {
       emit MyEvent("Player1 start");
 
     }
-    //启动游戏
-    function play(bytes1 plaintext) payable public{
+    function play(bytes1 plaintext) payable  public returns(string){
 
         if(keccak256(abi.encodePacked(bytes32(plaintext)))!=player1.ciphertext){
-            emit MyEvent("Player1 can not play");
+            emit MyEvent("the value is difference");
             return;
         }
         if(player2.status==0){
             emit MyEvent("Player2 is undefined");
             return;
         }
-        string memory result = getResult(plaintext,player2.plaintext);
         player1.status=0;
         player2.status=0;
-        emit MyEvent(result);
+        emit MyEvent(getResult(player1.plaintext,player2.plaintext));
     }
     function test2(bytes32 plaintext1,string plaintext2) pure public returns(bytes32,bytes32){
 
@@ -48,19 +45,18 @@ contract MyContract {
 
     function startAndPlay(bytes1 plaintext)payable public{
         player2 = Player(plaintext,"",1);
+        emit MyEvent("Player2 start and play");
     }
     function test(string plaintext) pure public returns(bytes32){
         return keccak256(abi.encodePacked(plaintext));
     }
-
-
     function getResult(bytes32 plaintext1,bytes32 plaintext2) public pure returns(string){
 
-        if(plaintext1=="a"&&plaintext2=="b"){
+        if(plaintext1==1&&plaintext2==2){
             return "player2 win";
-        }else if(plaintext1=="b"&&plaintext2=="c"){
+        }else if(plaintext1==2&&plaintext2==3){
             return "player2 win";
-        }else if(plaintext1=="c"&&plaintext1=="a"){
+        }else if(plaintext1==3&&plaintext1==1){
             return "player2 win";
         }else if(plaintext1==plaintext2){
             return "no win";
