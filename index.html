@@ -50,9 +50,10 @@ function startAndPlay(){
   var plaintext =document.forms[0].myChoise.value;
   //return;
     contract.startAndPlay(plaintext,function(error,result){
-      if(!error){console.log(result);
+      if(!error){
+        //console.log(result);
       }else{
-        //console.error(error);
+        console.error(error);
       }
     })
 }
