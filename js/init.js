@@ -6,41 +6,6 @@ var abi=
 [
 	{
 		"constant": false,
-		"inputs": [],
-		"name": "init",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "result",
-				"type": "string"
-			}
-		],
-		"name": "MyEvent",
-		"type": "event"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "plaintext",
-				"type": "bytes1"
-			}
-		],
-		"name": "play",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
 		"inputs": [
 			{
 				"name": "ciphertext",
@@ -51,6 +16,55 @@ var abi=
 		"outputs": [],
 		"payable": true,
 		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "plaintext1",
+				"type": "bytes32"
+			},
+			{
+				"name": "plaintext2",
+				"type": "string"
+			}
+		],
+		"name": "test2",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			},
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "player2",
+		"outputs": [
+			{
+				"name": "plaintext",
+				"type": "bytes32"
+			},
+			{
+				"name": "ciphertext",
+				"type": "bytes32"
+			},
+			{
+				"name": "status",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -91,6 +105,25 @@ var abi=
 		"type": "function"
 	},
 	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "plaintext",
+				"type": "bytes1"
+			}
+		],
+		"name": "play",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
 		"constant": true,
 		"inputs": [],
 		"name": "player1",
@@ -113,25 +146,12 @@ var abi=
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"constant": false,
 		"inputs": [],
-		"name": "player2",
-		"outputs": [
-			{
-				"name": "plaintext",
-				"type": "bytes32"
-			},
-			{
-				"name": "ciphertext",
-				"type": "bytes32"
-			},
-			{
-				"name": "status",
-				"type": "int256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
+		"name": "init",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -154,31 +174,16 @@ var abi=
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"anonymous": false,
 		"inputs": [
 			{
-				"name": "plaintext1",
-				"type": "bytes32"
-			},
-			{
-				"name": "plaintext2",
+				"indexed": false,
+				"name": "result",
 				"type": "string"
 			}
 		],
-		"name": "test2",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bytes32"
-			},
-			{
-				"name": "",
-				"type": "bytes32"
-			}
-		],
-		"payable": false,
-		"stateMutability": "pure",
-		"type": "function"
+		"name": "MyEvent",
+		"type": "event"
 	}
 ]
 ;

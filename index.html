@@ -6,7 +6,7 @@
 <script type="text/javascript" src="js/web3.min.js"></script>
 <script type="text/javascript" src="js/init.js"></script>
 <script>
- var address = "0x8ffca4227787294ae71ec8ae862adc0ab4c8aac0";
+ var address = "0x45500ec16098c31b07a5c3845ce5272c40efc5c5";
 window.addEventListener('load', function() {
    web3 = new Web3(Web3.givenProvider);
    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -61,7 +61,7 @@ function play(){
   var plaintext =document.forms[0].myChoise.value;
   plaintext = web3.utils.asciiToHex(plaintext);
   plaintext+="00000000000000000000000000000000000000000000000000000000000000";
-    contract.play(plaintext,function(error,result){
+    contract.play(plaintext,{gas:99999},function(error,result){
       if(!error){
         //console.log(result);
       }else{
@@ -73,9 +73,9 @@ function play(){
 </head>
 <body>
 <form>
-  <input type="radio" name="myChoise" value="a" checked>剪刀</input>
-  <input type="radio" name="myChoise" value="b">石头</input>
-  <input type="radio" name="myChoise" value="c">布</input>
+  <input type="radio" name="myChoise" value="1" checked>剪刀</input>
+  <input type="radio" name="myChoise" value="2">石头</input>
+  <input type="radio" name="myChoise" value="3">布</input>
   <br/>
 
 </form>
