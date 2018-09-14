@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/web3.min.js"></script>
+<script type="text/javascript" src="js/init.js"></script>
+<script>
+ var address = "0x8ffca4227787294ae71ec8ae862adc0ab4c8aac0";
+window.addEventListener('load', function() {
+   web3 = new Web3(Web3.givenProvider);
+   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+   if (typeof web3 !== 'undefined') {
+
+     // Use the browser's ethereum provider
+     var provider = web3.currentProvider
+     //console.log("ok");
+
+   } else {
+     console.log('No web3? You should consider trying MetaMask!')
+   }
+ });
+var contract = web3.eth.contract(abi).at(address);
+var myEvent = contract.MyEvent({});
+myEvent.watch(
+  function(error,result){
+    if(!error){
+      console.log(result.args.result);
+    }else{
+      console.error(error);
+    }
+  }
+);
+
+function start(){
+  var plaintext =document.forms[0].myChoise.value;
+  plaintext = web3.utils.asciiToHex(plaintext);
+  plaintext+="00000000000000000000000000000000000000000000000000000000000000";
+  var ciphertext = web3.utils.keccak256(plaintext);
+  contract.start(ciphertext,function(error,result){
+    if(!error){
+      //console.log(result);
+      }else{
+        console.error(error);
+      }
+    })
+}
+
+function startAndPlay(){
+  var plaintext =document.forms[0].myChoise.value;
+  //return;
+    contract.startAndPlay(plaintext,function(error,result){
+      if(!error){console.log(result);
+      }else{
+        //console.error(error);
+      }
+    })
+}
+function play(){
+  var plaintext =document.forms[0].myChoise.value;
+  plaintext = web3.utils.asciiToHex(plaintext);
+  plaintext+="00000000000000000000000000000000000000000000000000000000000000";
+    contract.play(plaintext,function(error,result){
+      if(!error){
+        //console.log(result);
+      }else{
+        console.error(error);
+      }
+    })
+}
+</script>
+</head>
+<body>
+<form>
+  <input type="radio" name="myChoise" value="a" checked>剪刀</input>
+  <input type="radio" name="myChoise" value="b">石头</input>
+  <input type="radio" name="myChoise" value="c">布</input>
+  <br/>
+
+</form>
+<button  onclick="start()">start</button>
+<button  onclick="play()">play</button>
+<button  onclick="startAndPlay()">startAndPlay</button>
+</body>
+</html>
