@@ -1,7 +1,7 @@
 pragma solidity ^0.4.25;
+import "action.sol"
 
 contract MyContract {
-    address creator;
     struct Player{
       bytes32 plaintext;//0:none 1:剪刀 2：石头 3：布
       bytes32 ciphertext;
