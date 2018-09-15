@@ -52,7 +52,7 @@ contract MyContract {
             player2.addr.transfer(bet*2);
         }else if(reslult==1){//player 1 win
             player1.addr.transfer(bet*2);
-            emit MyEvent("Player2 win");
+            emit MyEvent("Player1 win");
         }else{
             //do nothing
              emit MyEvent("no one win");
