@@ -6,7 +6,7 @@
 <script type="text/javascript" src="js/web3.min.js"></script>
 <script type="text/javascript" src="js/init.js"></script>
 <script>
- var address = "0x7c499898ac3e8456498a1d05a668f4bc47b298d7";
+ var address = "0x2c8184149a83d211641e807d111268c1f16c1980";
 window.addEventListener('load', function() {
    web3 = new Web3(Web3.givenProvider);
    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -37,7 +37,8 @@ function start(){
   plaintext = web3.utils.asciiToHex(plaintext);
   plaintext+="00000000000000000000000000000000000000000000000000000000000000";
   var ciphertext = web3.utils.keccak256(plaintext);
-  contract.start(ciphertext,function(error,result){
+  var bet = document.forms[0].bet.value;
+  contract.start(ciphertext,{value:web3.utils.toWei(bet,"ether")},function(error,result){
     if(!error){
       //console.log(result);
       }else{
@@ -48,8 +49,8 @@ function start(){
 
 function startAndPlay(){
   var plaintext =document.forms[0].myChoise.value;
-  //return;
-    contract.startAndPlay(plaintext,function(error,result){
+  var bet = document.forms[0].bet.value;
+    contract.startAndPlay(plaintext,{value:web3.utils.toWei(bet,"ether")},function(error,result){
       if(!error){
         //console.log(result);
       }else{
@@ -77,7 +78,8 @@ function play(){
   <input type="radio" name="myChoise" value="2">石头</input>
   <input type="radio" name="myChoise" value="3">布</input>
   <br/>
-
+<input type="number" name="bet" value="5"></input>
+<br/>
 </form>
 <button  onclick="start()">start</button>
 <button  onclick="play()">play</button>

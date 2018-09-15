@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/web3.min.js"></script>
+<script>
+ var address = "0x9e8a1592834474362baa4a3f95d41b99e10d9956";
+ var abi=
+ [
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "deposit",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "send",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_address",
+				"type": "address"
+			},
+			{
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "transferTo",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "money",
+				"type": "uint256"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "balances",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getContractBalance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+ ;
+window.addEventListener('load', function() {
+   web3 = new Web3(Web3.givenProvider);
+   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+   if (typeof web3 !== 'undefined') {
+
+     // Use the browser's ethereum provider
+     var provider = web3.currentProvider
+     //console.log("ok");
+
+   } else {
+     console.log('No web3? You should consider trying MetaMask!')
+   }
+ });
+var contract = web3.eth.contract(abi).at(address);
+
+function deposit(){
+    contract.deposit({value:web3.utils.toWei(coin.value,"ether")},function(error,result){
+      if(!error){
+        console.log(result);
+      }else{
+        console.error(error);
+      }
+    })
+}
+function withdraw(){
+  var coin = document.getElementById("coin");
+    contract.withdraw(web3.utils.toWei(coin.value,"ether"),function(error,result){
+      if(!error){
+        console.log(result);
+      }else{
+        console.error(error);
+      }
+    })
+}
+function getBalance(){
+web3.eth.getAccounts(function(error,result){
+  if(!error){
+    web3.eth.getBalance(result[0],function(error,result){
+      if(!error){
+        console.log(result);
+      }else{
+        console.error(error);
+      }
+    });
+  }else{
+    console.error(error);
+  }
+});
+}
+
+function getContractBalance(){
+  contract.getContractBalance(function(error,result){
+    if(!error){
+      console.log(result);
+    }else{
+      console.error(error);
+    }
+  })
+}
+</script>
+</head>
+<body>
+<input id="coin" value="1"/>
+<button  onclick="deposit()">deposit</button>
+<button  onclick="withdraw()">withdraw</button>
+<button  onclick="getBalance()">getBalance</button>
+<button  onclick="getContractBalance()">getContractBalance</button>
+</body>
+</html>

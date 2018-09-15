@@ -22,27 +22,47 @@ var abi=
 		"constant": true,
 		"inputs": [
 			{
-				"name": "plaintext1",
-				"type": "bytes32"
-			},
-			{
-				"name": "plaintext2",
-				"type": "string"
+				"name": "",
+				"type": "address"
 			}
 		],
-		"name": "test2",
+		"name": "balances",
 		"outputs": [
 			{
 				"name": "",
-				"type": "bytes32"
-			},
-			{
-				"name": "",
-				"type": "bytes32"
+				"type": "uint256"
 			}
 		],
 		"payable": false,
-		"stateMutability": "pure",
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getBalanceInContract",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "money",
+				"type": "uint256"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -61,6 +81,14 @@ var abi=
 			{
 				"name": "status",
 				"type": "int256"
+			},
+			{
+				"name": "bet",
+				"type": "uint256"
+			},
+			{
+				"name": "addr",
+				"type": "address"
 			}
 		],
 		"payable": false,
@@ -97,7 +125,7 @@ var abi=
 		"outputs": [
 			{
 				"name": "",
-				"type": "string"
+				"type": "int256"
 			}
 		],
 		"payable": false,
@@ -124,6 +152,15 @@ var abi=
 		"type": "function"
 	},
 	{
+		"constant": false,
+		"inputs": [],
+		"name": "deposit",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
 		"constant": true,
 		"inputs": [],
 		"name": "player1",
@@ -139,6 +176,14 @@ var abi=
 			{
 				"name": "status",
 				"type": "int256"
+			},
+			{
+				"name": "bet",
+				"type": "uint256"
+			},
+			{
+				"name": "addr",
+				"type": "address"
 			}
 		],
 		"payable": false,

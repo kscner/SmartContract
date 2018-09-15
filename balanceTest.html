@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/web3.min.js"></script>
+<script>
+ var address = "0xcd435863c174aa10ab056e0f095fff019f59aa93";
+ var abi=
+ [
+ 	{
+ 		"constant": false,
+ 		"inputs": [],
+ 		"name": "send",
+ 		"outputs": [
+ 			{
+ 				"name": "",
+ 				"type": "uint256"
+ 			}
+ 		],
+ 		"payable": true,
+ 		"stateMutability": "payable",
+ 		"type": "function"
+ 	},
+ 	{
+ 		"constant": false,
+ 		"inputs": [
+ 			{
+ 				"name": "_address",
+ 				"type": "address"
+ 			},
+ 			{
+ 				"name": "value",
+ 				"type": "uint256"
+ 			}
+ 		],
+ 		"name": "transferTo",
+ 		"outputs": [],
+ 		"payable": false,
+ 		"stateMutability": "nonpayable",
+ 		"type": "function"
+ 	},
+ 	{
+ 		"payable": true,
+ 		"stateMutability": "payable",
+ 		"type": "fallback"
+ 	},
+ 	{
+ 		"constant": true,
+ 		"inputs": [],
+ 		"name": "getBalance",
+ 		"outputs": [
+ 			{
+ 				"name": "",
+ 				"type": "uint256"
+ 			}
+ 		],
+ 		"payable": false,
+ 		"stateMutability": "view",
+ 		"type": "function"
+ 	},
+ 	{
+ 		"constant": true,
+ 		"inputs": [],
+ 		"name": "money",
+ 		"outputs": [
+ 			{
+ 				"name": "",
+ 				"type": "uint256"
+ 			}
+ 		],
+ 		"payable": false,
+ 		"stateMutability": "view",
+ 		"type": "function"
+ 	}
+ ]
+ ;
+window.addEventListener('load', function() {
+   web3 = new Web3(Web3.givenProvider);
+   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+   if (typeof web3 !== 'undefined') {
+
+     // Use the browser's ethereum provider
+     var provider = web3.currentProvider
+     //console.log("ok");
+
+   } else {
+     console.log('No web3? You should consider trying MetaMask!')
+   }
+ });
+var contract = web3.eth.contract(abi).at(address);
+
+function getBalance(){
+    contract.getBalance(function(error,result){
+      if(!error){
+        console.log(result);
+      }else{
+        console.error(error);
+      }
+    })
+}
+function send(){
+  var coin = document.getElementById("coin");
+    contract.send({value:web3.utils.toWei(coin.value,"ether")},function(error,result){
+      if(!error){
+        console.log(result);
+      }else{
+        console.error(error);
+      }
+    })
+}
+</script>
+</head>
+<body>
+<input id="coin" value="1.009"/>
+<button  onclick="send()">send</button>
+<button  onclick="getBalance()">getBalance</button>
+
+</body>
+</html>
