@@ -1,7 +1,8 @@
 pragma solidity ^0.4.25;
 //import "github.com/ethereum/dapp-bin/library/iterable_mapping.sol" as it_mapping;
-import "github.com/ethereum/dapp-bin/library/stringUtils.sol";
-contract MyContract {
+//import "github.com/ethereum/dapp-bin/library/stringUtils.sol";
+import "./IMyContract.sol";
+contract MyContract is IMyContract {
     struct Player{
       bytes32 plaintext;//0:none 1:剪刀 2：石头 3：布
       bytes32 ciphertext;//密文
@@ -20,7 +21,7 @@ contract MyContract {
     }
 
     //玩家1加入游戏
-    function start(bytes32 ciphertext) payable public{
+    function join(bytes32 ciphertext) payable public{
       if(player1.status!=0){//如果玩家重复加入给出提示，并返回赌注
           emit MyEvent("Player1 has aleady started");
           player1.addr.transfer(msg.value);
@@ -31,7 +32,7 @@ contract MyContract {
 
     }
     //玩家1开始游戏
-    function play(bytes1 plaintext) payable  public returns(string){
+    function play(bytes1 plaintext) payable  public{
         if(keccak256(abi.encodePacked(bytes32(plaintext)))!=player1.ciphertext){//如果前后出牌不一致，则给出提示
             emit MyEvent("the value is difference");
             return;
@@ -66,7 +67,10 @@ contract MyContract {
 
     }
     //玩家2加入并开始游戏
-    function startAndPlay(bytes1 plaintext)payable public{
+    function joinAndPlay(bytes1 plaintext)payable public{
+        if(player1.status==0){//当玩家1还没加入时
+          emit MyEvent("Player2 has aleady started");
+        }
         if(player2.status!=0){
           emit MyEvent("Player2 has aleady started");
           player2.addr.transfer(msg.value);

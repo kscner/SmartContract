@@ -6,7 +6,7 @@
 <script type="text/javascript" src="js/web3.min.js"></script>
 <script type="text/javascript" src="js/init.js"></script>
 <script>
- var address = "0xc61cf49050f18e7529570b5ea2084c06dcc28b6b";
+ var address = "0xdfef1db23bca5450d726dea49189fa243783eebc";
 window.addEventListener('load', function() {
    web3 = new Web3(Web3.givenProvider);
    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -22,6 +22,22 @@ window.addEventListener('load', function() {
  });
 var contract = web3.eth.contract(abi).at(address);
 var myEvent = contract.MyEvent({});
+init();
+function init(){
+  contract.player1.call(function(error,result){
+    if(result[2].toString()==0){
+      document.getElementById("joinButton").disabled = false;
+    }else{
+      contract.player2.call(function(error,result){
+        if(result[2].toString()==0){
+          document.getElementById("joinAndPlayButton").disabled = false;
+        }
+      })
+    }
+  })
+
+}
+
 myEvent.watch(
   function(error,result){
     if(!error){
@@ -32,13 +48,13 @@ myEvent.watch(
   }
 );
 
-function start(){
+function join(){
   var plaintext =document.forms[0].myChoise.value;
   plaintext = web3.utils.asciiToHex(plaintext);
   plaintext+="00000000000000000000000000000000000000000000000000000000000000";
   var ciphertext = web3.utils.keccak256(plaintext);
   var bet = document.forms[0].bet.value;
-  contract.start(ciphertext,{value:web3.utils.toWei(bet,"ether")},function(error,result){
+  contract.join(ciphertext,{value:web3.utils.toWei(bet,"ether")},function(error,result){
     if(!error){
       //console.log(result);
       }else{
@@ -47,12 +63,12 @@ function start(){
     })
 }
 
-function startAndPlay(){
+function joinAndPlay(){
   var plaintext =document.forms[0].myChoise.value;
   plaintext = web3.utils.asciiToHex(plaintext);
   plaintext+="00000000000000000000000000000000000000000000000000000000000000";
   var bet = document.forms[0].bet.value;
-    contract.startAndPlay(plaintext,{value:web3.utils.toWei(bet,"ether")},function(error,result){
+    contract.joinAndPlay(plaintext,{value:web3.utils.toWei(bet,"ether")},function(error,result){
       if(!error){
         //console.log(result);
       }else{
@@ -83,8 +99,8 @@ function play(){
 <input type="number" name="bet" value="5"></input>
 <br/>
 </form>
-<button  onclick="start()">start</button>
-<button  onclick="play()">play</button>
-<button  onclick="startAndPlay()">startAndPlay</button>
+<button id="joinButton"  onclick="join()" disabled=disabled>start</button>
+<button id="playButton"  onclick="play()" disabled=disabled>play</button>
+<button id="joinAndPlayButton"  onclick="joinAndPlay()" disabled=disabled>startAndPlay</button>
 </body>
 </html>
