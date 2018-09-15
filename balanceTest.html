@@ -5,73 +5,25 @@
 <title>Insert title here</title>
 <script type="text/javascript" src="js/web3.min.js"></script>
 <script>
- var address = "0xcd435863c174aa10ab056e0f095fff019f59aa93";
+ var address = "0x2c8184149a83d211641e807d111268c1f16c1980";
  var abi=
  [
- 	{
- 		"constant": false,
- 		"inputs": [],
- 		"name": "send",
- 		"outputs": [
- 			{
- 				"name": "",
- 				"type": "uint256"
- 			}
- 		],
- 		"payable": true,
- 		"stateMutability": "payable",
- 		"type": "function"
- 	},
- 	{
- 		"constant": false,
- 		"inputs": [
- 			{
- 				"name": "_address",
- 				"type": "address"
- 			},
- 			{
- 				"name": "value",
- 				"type": "uint256"
- 			}
- 		],
- 		"name": "transferTo",
- 		"outputs": [],
- 		"payable": false,
- 		"stateMutability": "nonpayable",
- 		"type": "function"
- 	},
  	{
  		"payable": true,
  		"stateMutability": "payable",
  		"type": "fallback"
  	},
  	{
- 		"constant": true,
- 		"inputs": [],
- 		"name": "getBalance",
- 		"outputs": [
+ 		"anonymous": false,
+ 		"inputs": [
  			{
- 				"name": "",
+ 				"indexed": false,
+ 				"name": "str",
  				"type": "uint256"
  			}
  		],
- 		"payable": false,
- 		"stateMutability": "view",
- 		"type": "function"
- 	},
- 	{
- 		"constant": true,
- 		"inputs": [],
- 		"name": "money",
- 		"outputs": [
- 			{
- 				"name": "",
- 				"type": "uint256"
- 			}
- 		],
- 		"payable": false,
- 		"stateMutability": "view",
- 		"type": "function"
+ 		"name": "MyEvent",
+ 		"type": "event"
  	}
  ]
  ;
@@ -101,7 +53,7 @@ function getBalance(){
 }
 function send(){
   var coin = document.getElementById("coin");
-    contract.send({value:web3.utils.toWei(coin.value,"ether")},function(error,result){
+    web3.eth.sendTransaction({value:web3.utils.toWei(coin.value,"ether"),from:"0x2A9A40215cA4C19627f3547045DadA2909C5Fe3f"},function(error,result){
       if(!error){
         console.log(result);
       }else{

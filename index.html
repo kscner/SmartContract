@@ -6,7 +6,7 @@
 <script type="text/javascript" src="js/web3.min.js"></script>
 <script type="text/javascript" src="js/init.js"></script>
 <script>
- var address = "0xb8c13c5a848e799673588b0e185dcd1bd9d2a834";
+ var address = "0xc61cf49050f18e7529570b5ea2084c06dcc28b6b";
 window.addEventListener('load', function() {
    web3 = new Web3(Web3.givenProvider);
    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -49,6 +49,8 @@ function start(){
 
 function startAndPlay(){
   var plaintext =document.forms[0].myChoise.value;
+  plaintext = web3.utils.asciiToHex(plaintext);
+  plaintext+="00000000000000000000000000000000000000000000000000000000000000";
   var bet = document.forms[0].bet.value;
     contract.startAndPlay(plaintext,{value:web3.utils.toWei(bet,"ether")},function(error,result){
       if(!error){

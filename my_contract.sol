@@ -4,13 +4,13 @@ import "github.com/ethereum/dapp-bin/library/stringUtils.sol";
 contract MyContract {
     struct Player{
       bytes32 plaintext;//0:none 1:剪刀 2：石头 3：布
-      bytes32 ciphertext;
+      bytes32 ciphertext;//密文
       int status;//0:undefind 1:waiting 2:finished
-      uint256 bet;
+      uint256 bet;//赌注
       address addr;
     }
-    Player public player1 = Player(0,0,0,0,0x0);
-    Player public player2 = Player(0,0,0,0,0x0);
+    Player public player1 = Player(0,0,0,0,0x0);//玩家1初始化
+    Player public player2 = Player(0,0,0,0,0x0);//玩家2初始化
 
 
     event MyEvent(string result);
@@ -18,25 +18,29 @@ contract MyContract {
         player1.status = 0;
         player2.status = 0;
     }
+
+    //玩家1加入游戏
     function start(bytes32 ciphertext) payable public{
-      if(player1.status!=0){
-          emit MyEvent("Player1 can not start");
+      if(player1.status!=0){//如果玩家重复加入给出提示，并返回赌注
+          emit MyEvent("Player1 has aleady started");
+          player1.addr.transfer(msg.value);
           return;
       }
       player1 = Player(0,ciphertext,1,msg.value,msg.sender);
       emit MyEvent("Player1 start");
 
     }
+    //玩家1开始游戏
     function play(bytes1 plaintext) payable  public returns(string){
-
-        if(keccak256(abi.encodePacked(bytes32(plaintext)))!=player1.ciphertext){
+        if(keccak256(abi.encodePacked(bytes32(plaintext)))!=player1.ciphertext){//如果前后出牌不一致，则给出提示
             emit MyEvent("the value is difference");
             return;
         }
-        if(player2.status==0){
+        if(player2.status==0){//如果玩家2还未加入则给出提示
             emit MyEvent("Player2 is undefined");
             return;
         }
+        player1.plaintext = plaintext;
         player1.status=0;
         player2.status=0;
         uint256 bet;
@@ -48,24 +52,28 @@ contract MyContract {
         }
         int reslult = getResult(player1.plaintext,player2.plaintext);
         if(reslult==-1){//player2 win
-        emit MyEvent("Player2 win");
-            player2.addr.transfer(bet*2);
+            emit MyEvent("Player2 win");
+            player2.addr.transfer(player2.bet+bet);
         }else if(reslult==1){//player 1 win
-            player1.addr.transfer(bet*2);
+            player1.addr.transfer(player1.bet+bet);
             emit MyEvent("Player1 win");
         }else{
-            //do nothing
+            //平局则返还赌注
+            player1.addr.transfer(player1.bet);
+            player2.addr.transfer(player2.bet);
              emit MyEvent("no one win");
         }
 
     }
-
+    //玩家2加入并开始游戏
     function startAndPlay(bytes1 plaintext)payable public{
+        if(player2.status!=0){
+          emit MyEvent("Player2 has aleady started");
+          player2.addr.transfer(msg.value);
+          return;
+      }
         player2 = Player(plaintext,"",1,msg.value,msg.sender);
         emit MyEvent("Player2 start and play");
-    }
-    function test(string plaintext) pure public returns(bytes32){
-        return keccak256(abi.encodePacked(plaintext));
     }
     function getResult(bytes32 plaintext1,bytes32 plaintext2) public pure returns(int){
 
