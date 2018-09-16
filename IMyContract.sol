@@ -1,6 +1,15 @@
 pragma solidity ^0.4.25;
 interface IMyContract {
-    function play(bytes1 plaintext) external payable  returns(string);
+
     function join(bytes32 ciphertext) external payable;
-    function joinAndPlay(bytes1 plaintext)payable external;
+
+    function play(bytes1 plaintext) external payable;
+
+    function joinAndPlay(bytes1 plaintext) external payable;
+
+    event MyEvent(string result);
+
+    function getPlayer1Status() external view returns(int) ;
+
+    function getPlayer2Status() external view returns(int) ;
 }

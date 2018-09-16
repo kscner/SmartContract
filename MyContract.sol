@@ -3,6 +3,7 @@ pragma solidity ^0.4.25;
 //import "github.com/ethereum/dapp-bin/library/stringUtils.sol";
 import "./IMyContract.sol";
 contract MyContract is IMyContract {
+
     struct Player{
       bytes32 plaintext;//0:none 1:剪刀 2：石头 3：布
       bytes32 ciphertext;//密文
@@ -10,8 +11,8 @@ contract MyContract is IMyContract {
       uint256 bet;//赌注
       address addr;
     }
-    Player public player1 = Player(0,0,0,0,0x0);//玩家1初始化
-    Player public player2 = Player(0,0,0,0,0x0);//玩家2初始化
+    Player private player1 = Player(0,0,0,0,0x0);//玩家1初始化
+    Player private player2 = Player(0,0,0,0,0x0);//玩家2初始化
 
 
     event MyEvent(string result);
@@ -30,6 +31,12 @@ contract MyContract is IMyContract {
       player1 = Player(0,ciphertext,1,msg.value,msg.sender);
       emit MyEvent("Player1 start");
 
+    }
+    function getPlayer1Status() view public returns(int){
+        return player1.status;
+    }
+    function getPlayer2Status() view public returns(int){
+        return player2.status;
     }
     //玩家1开始游戏
     function play(bytes1 plaintext) payable  public{
@@ -79,7 +86,7 @@ contract MyContract is IMyContract {
         player2 = Player(plaintext,"",1,msg.value,msg.sender);
         emit MyEvent("Player2 start and play");
     }
-    function getResult(bytes32 plaintext1,bytes32 plaintext2) public pure returns(int){
+    function getResult(bytes32 plaintext1,bytes32 plaintext2) private pure returns(int){
 
         if(plaintext1==1&&plaintext2==2){
             return -1;
