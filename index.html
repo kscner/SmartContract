@@ -1,108 +1,246 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script type="text/javascript" src="js/web3.min.js"></script>
-<script type="text/javascript" src="js/init.js"></script>
-<script>
- var address = "0x42e835aa2030363e4580ebe5f69e4f20bdfa5c85";
-window.addEventListener('load', function() {
-   web3 = new Web3(Web3.givenProvider);
-   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-   if (typeof web3 !== 'undefined') {
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-     // Use the browser's ethereum provider
-     var provider = web3.currentProvider
-     //console.log("ok");
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
 
-   } else {
-     console.log('No web3? You should consider trying MetaMask!')
-   }
- });
-var contract = web3.eth.contract(abi).at(address);
-var myEvent = contract.MyEvent({});
-init();
-function init(){
-  contract.getPlayer1Status(function(error,result){
-    if(result==0){
-      document.getElementById("joinButton").disabled = false;
-    }else{
-      contract.getPlayer2Status(function(error,result){
-        if(result==0){
-          document.getElementById("joinAndPlayButton").disabled = false;
-        }else{
-          document.getElementById("playButton").disabled = false;
+  <title>Hello, world!</title>
+  <script type="text/javascript" src="js/web3.min.js"></script>
+  <script type="text/javascript" src="js/abi.js"></script>
+  <script type="text/javascript" src="js/init.js"></script>
+  <script>
+    var currentAddress;
+    web3.eth.getAccounts(function (error, result) {
+      if (!error) {
+        currentAddress = result[0];
+        init();
+      }
+    })
+    init();
+    function init() {
+      var player1Status;
+      var player1Address;
+      var player2Status;
+      var player2Address;
+
+      contract.getPlayersInfo(function (error, result) {
+        if (error) {
+          return;
+        }
+
+        player1Status = result[0];//
+        player1Address = result[1];
+        player2Status = result[2];//
+        player2Address = result[3];
+        if (player1Status == 0 && player1Status == 0&&currentAddress != player1Address) {//player1第一次进入，还未下注
+          document.getElementById("joinButton").hidden = false;
+        } else if (player1Status == 1 && currentAddress == player1Address&&currentAddress != player2Address) {//player1已下注
+          if (player2Status == 1) {//player2已下注
+            document.getElementById("playButton").hidden = false;
+            document.getElementById("player1CardSubtitle").innerText = player1Address;
+            document.getElementById("player2CardSubtitle").innerText = player2Address;
+            document.getElementById("player2CardText").innerText = "Has joined and Played.";
+            document.getElementById("player1CardText").innerText = "Please Play.";
+          }
+
+        }
+        if(player2Status==0&&player1Status==1&& currentAddress!=player2Address){//player2未加入
+          document.getElementById("joinAndPlayButton").hidden = false;
+          document.getElementById("player1CardSubtitle").innerText = player1Address;
+          document.getElementById("player2CardSubtitle").innerText = "Not joined.";
+          document.getElementById("player1CardText").innerText = "Player1 is waiting for you to join and play.";
+        }
+        if(player2Status==1&&player1Status==1&& currentAddress==player2Address){//player2已加入
+          document.getElementById("player1CardSubtitle").innerText = player1Address;
+          document.getElementById("player2CardSubtitle").innerText = player2Address;
+          document.getElementById("player1CardText").innerText = "?";
+          document.getElementById("player2CardText").innerText = "you are waiting for player1 to start.";
+        }
+
+      });
+    }
+ 
+
+  </script>
+</head>
+
+<body>
+  <form>
+    <div class="container-fluid">
+      <div class="alert alert-primary" id="status" role="alert">
+        There is no one join the game.
+      </div>
+
+
+      <div class="container">
+        <div class="row">
+          <div class="col-sm text-center">
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">Player one</h5>
+                <h6 class="card-subtitle mb-2 text-muted" style="height: 38px" id="player1CardSubtitle">Card subtitle</h6>
+                <div class="card-text" style="height: 72px" id="player1CardText">
+
+                  <div class="container text-center">
+
+                    <div class="row">
+                      <div class="col">
+                        <input class="form-check-input" type="radio" name="player1Choise" id="exampleRadios1" value="1">
+                        <label class="form-check-label" for="exampleRadios1">
+                          Scissors
+                        </label>
+                      </div>
+                      <div class="col-sm">
+                        <input class="form-check-input" type="radio" name="player1Choise" id="exampleRadios1" value="2">
+                        <label class="form-check-label" for="exampleRadios1">
+                          Rock
+                        </label>
+                      </div>
+                      <div class="col-sm">
+                        <input class="form-check-input" type="radio" name="player1Choise" id="exampleRadios1" value="3">
+                        <label class="form-check-label" for="exampleRadios1">
+                          Paper
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="btn-group" role="group" aria-label="Basic example" style="width:100%;">
+                  <button class="btn btn-primary" style="width:100%;" id="joinButton" onclick="join()" type="button"
+                    hidden="hidden">join</button>
+                  <button class="btn btn-primary" style="width:100%;" id="playButton" onclick="play()" type="button"
+                    hidden="hidden">play</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm text-center">
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">Player two</h5>
+                <h6 class="card-subtitle mb-2 text-muted" style="height: 38px" id="player2CardSubtitle">Card subtitle</h6>
+                <div class="card-text" id="player2CardText">
+                    <div class="container text-center">
+
+                        <div class="row">
+                          <div class="col">
+                            <input class="form-check-input" type="radio" name="player2Choise" id="exampleRadios1" value="1">
+                            <label class="form-check-label" for="exampleRadios1">
+                              Scissors
+                            </label>
+                          </div>
+                          <div class="col-sm">
+                            <input class="form-check-input" type="radio" name="player2Choise" id="exampleRadios1" value="2">
+                            <label class="form-check-label" for="exampleRadios1">
+                              Rock
+                            </label>
+                          </div>
+                          <div class="col-sm">
+                            <input class="form-check-input" type="radio" name="player2Choise" id="exampleRadios1" value="3">
+                            <label class="form-check-label" for="exampleRadios1">
+                              Paper
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                </div>
+                <button id="joinAndPlayButton" class="btn btn-primary" style="width:100%;" type="button" onclick="joinAndPlay()" hidden="hidden">joinAndPlay</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <br />
+      <input type="radio" name="myChoise" value="1" checked>剪刀</input>
+      <input type="radio" name="myChoise" value="2">石头</input>
+      <input type="radio" name="myChoise" value="3">布</input>
+      <br />
+      <input type="number" name="bet" value="5"></input>
+      <br />
+  </form>
+
+
+  </div>
+
+
+
+
+
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <script>
+    myEvent.watch(
+      function (error, result) {
+        if (!error) {
+          console.log(result.args.result);
+        } else {
+          console.error(error);
+        }
+      }
+    );
+
+    function join() {
+      var plaintext = document.forms[0].player1Choise.value;
+      plaintext = web3.utils.asciiToHex(plaintext);
+      plaintext += "00000000000000000000000000000000000000000000000000000000000000";
+      var ciphertext = web3.utils.keccak256(plaintext);
+      var bet = document.forms[0].bet.value;
+      contract.join(ciphertext, { value: web3.utils.toWei(bet, "ether") }, function (error, result) {
+        if (!error) {
+          //console.log(result);
+        } else {
+          console.error(error);
         }
       })
     }
-  })
 
-}
-
-myEvent.watch(
-  function(error,result){
-    if(!error){
-      console.log(result.args.result);
-    }else{
-      console.error(error);
+    function joinAndPlay() {
+      var plaintext = document.forms[0].player2Choise.value;
+      if(plaintext==""){
+        alert("please choose one:");
+        return;
+      }
+      plaintext = web3.utils.asciiToHex(plaintext);
+      plaintext += "00000000000000000000000000000000000000000000000000000000000000";
+      var bet = document.forms[0].bet.value;
+      contract.joinAndPlay(plaintext, { value: web3.utils.toWei(bet, "ether") }, function (error, result) {
+        if (!error) {
+          //console.log(result);
+        } else {
+          console.error(error);
+        }
+      })
     }
-  }
-);
-
-function join(){
-  var plaintext =document.forms[0].myChoise.value;
-  plaintext = web3.utils.asciiToHex(plaintext);
-  plaintext+="00000000000000000000000000000000000000000000000000000000000000";
-  var ciphertext = web3.utils.keccak256(plaintext);
-  var bet = document.forms[0].bet.value;
-  contract.join(ciphertext,{value:web3.utils.toWei(bet,"ether")},function(error,result){
-    if(!error){
-      //console.log(result);
-      }else{
-        console.error(error);
-      }
-    })
-}
-
-function joinAndPlay(){
-  var plaintext =document.forms[0].myChoise.value;
-  plaintext = web3.utils.asciiToHex(plaintext);
-  plaintext+="00000000000000000000000000000000000000000000000000000000000000";
-  var bet = document.forms[0].bet.value;
-    contract.joinAndPlay(plaintext,{value:web3.utils.toWei(bet,"ether")},function(error,result){
-      if(!error){
-        //console.log(result);
-      }else{
-        console.error(error);
-      }
-    })
-}
-function play(){
-  var plaintext =document.forms[0].myChoise.value;
-  plaintext = web3.utils.asciiToHex(plaintext);
-  plaintext+="00000000000000000000000000000000000000000000000000000000000000";
-    contract.play(plaintext,{gas:99999},function(error,result){
-      if(!error){
-        //console.log(result);
-      }else{
-        console.error(error);
-      }
-    })
-}
-</script>
-</head>
-<body>
-<form>
-  <input type="radio" name="myChoise" value="1" checked>剪刀</input>
-  <input type="radio" name="myChoise" value="2">石头</input>
-  <input type="radio" name="myChoise" value="3">布</input>
-  <br/>
-<input type="number" name="bet" value="5"></input>
-<br/>
-</form>
-<button id="joinButton"  onclick="join()" disabled=disabled>start</button>
-<button id="playButton"  onclick="play()" disabled=disabled>play</button>
-<button id="joinAndPlayButton"  onclick="joinAndPlay()" disabled=disabled>startAndPlay</button>
+    function play() {
+      var plaintext = document.forms[0].player1Choise.value;
+      plaintext = web3.utils.asciiToHex(plaintext);
+      plaintext += "00000000000000000000000000000000000000000000000000000000000000";
+      contract.play(plaintext, { gas: 99999 }, function (error, result) {
+        if (!error) {
+          //console.log(result);
+        } else {
+          console.error(error);
+        }
+      })
+    }
+  </script>
 </body>
+
 </html>

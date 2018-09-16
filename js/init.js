@@ -1,90 +1,20 @@
 /**
  *
  */
+var address = "0xf11dfa895a213a3eda6ae4bfd434f9818ea10506";
+     
+window.addEventListener('load', function () {
+	web3 = new Web3(Web3.givenProvider);
+	// Checking if Web3 has been injected by the browser (Mist/MetaMask)
+	if (typeof web3 !== 'undefined') {
 
-var abi=
-[
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getPlayer1Status",
-		"outputs": [
-			{
-				"name": "",
-				"type": "int256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "plaintext",
-				"type": "bytes1"
-			}
-		],
-		"name": "joinAndPlay",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "ciphertext",
-				"type": "bytes32"
-			}
-		],
-		"name": "join",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "plaintext",
-				"type": "bytes1"
-			}
-		],
-		"name": "play",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getPlayer2Status",
-		"outputs": [
-			{
-				"name": "",
-				"type": "int256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "result",
-				"type": "string"
-			}
-		],
-		"name": "MyEvent",
-		"type": "event"
+	  // Use the browser's ethereum provider
+	  var provider = web3.currentProvider
+	  //console.log("ok");
+
+	} else {
+	  console.log('No web3? You should consider trying MetaMask!')
 	}
-]
-;
+  });
+  var contract = web3.eth.contract(abi).at(address);
+  var myEvent = contract.MyEvent({});

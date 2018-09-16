@@ -21,6 +21,7 @@ contract MyContract is IMyContract {
         player2.status = 0;
     }
 
+
     //玩家1加入游戏
     function join(bytes32 ciphertext) payable public{
       if(player1.status!=0){//如果玩家重复加入给出提示，并返回赌注
@@ -32,8 +33,8 @@ contract MyContract is IMyContract {
       emit MyEvent("Player1 start");
 
     }
-    function getPlayer1Status() view public returns(int){
-        return player1.status;
+    function getPlayersInfo() view public returns(int,address,int,address){
+        return (player1.status,player1.addr,player2.status,player2.addr); 
     }
     function getPlayer2Status() view public returns(int){
         return player2.status;
