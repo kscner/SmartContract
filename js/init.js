@@ -6,94 +6,8 @@ var abi=
 [
 	{
 		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "balances",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
 		"inputs": [],
-		"name": "getBalanceInContract",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "money",
-				"type": "uint256"
-			}
-		],
-		"name": "withdraw",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "player2",
-		"outputs": [
-			{
-				"name": "plaintext",
-				"type": "bytes32"
-			},
-			{
-				"name": "ciphertext",
-				"type": "bytes32"
-			},
-			{
-				"name": "status",
-				"type": "int256"
-			},
-			{
-				"name": "bet",
-				"type": "uint256"
-			},
-			{
-				"name": "addr",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "plaintext1",
-				"type": "bytes32"
-			},
-			{
-				"name": "plaintext2",
-				"type": "bytes32"
-			}
-		],
-		"name": "getResult",
+		"name": "getPlayer1Status",
 		"outputs": [
 			{
 				"name": "",
@@ -101,7 +15,7 @@ var abi=
 			}
 		],
 		"payable": false,
-		"stateMutability": "pure",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -147,51 +61,17 @@ var abi=
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [],
-		"name": "deposit",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [],
-		"name": "player1",
+		"name": "getPlayer2Status",
 		"outputs": [
 			{
-				"name": "plaintext",
-				"type": "bytes32"
-			},
-			{
-				"name": "ciphertext",
-				"type": "bytes32"
-			},
-			{
-				"name": "status",
+				"name": "",
 				"type": "int256"
-			},
-			{
-				"name": "bet",
-				"type": "uint256"
-			},
-			{
-				"name": "addr",
-				"type": "address"
 			}
 		],
 		"payable": false,
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "init",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
 		"type": "function"
 	},
 	{

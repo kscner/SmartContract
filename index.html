@@ -6,7 +6,7 @@
 <script type="text/javascript" src="js/web3.min.js"></script>
 <script type="text/javascript" src="js/init.js"></script>
 <script>
- var address = "0xdfef1db23bca5450d726dea49189fa243783eebc";
+ var address = "0x42e835aa2030363e4580ebe5f69e4f20bdfa5c85";
 window.addEventListener('load', function() {
    web3 = new Web3(Web3.givenProvider);
    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -24,13 +24,15 @@ var contract = web3.eth.contract(abi).at(address);
 var myEvent = contract.MyEvent({});
 init();
 function init(){
-  contract.player1.call(function(error,result){
-    if(result[2].toString()==0){
+  contract.getPlayer1Status(function(error,result){
+    if(result==0){
       document.getElementById("joinButton").disabled = false;
     }else{
-      contract.player2.call(function(error,result){
-        if(result[2].toString()==0){
+      contract.getPlayer2Status(function(error,result){
+        if(result==0){
           document.getElementById("joinAndPlayButton").disabled = false;
+        }else{
+          document.getElementById("playButton").disabled = false;
         }
       })
     }
