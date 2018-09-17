@@ -33,12 +33,14 @@ contract MyContract is IMyContract {
       emit MyEvent("Player1 start");
 
     }
-    function getPlayersInfo() view public returns(int,address,int,address){
-        return (player1.status,player1.addr,player2.status,player2.addr); 
+    function getPlayersInfo() view public returns(int[],address[]){
+        int[] status;
+        address[] addr;
+        status.push(player1.status);
+        status.push(player2.status);
+        return (status,addr);
     }
-    function getPlayer2Status() view public returns(int){
-        return player2.status;
-    }
+
     //玩家1开始游戏
     function play(bytes1 plaintext) payable  public{
         if(keccak256(abi.encodePacked(bytes32(plaintext)))!=player1.ciphertext){//如果前后出牌不一致，则给出提示

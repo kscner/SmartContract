@@ -1,8 +1,8 @@
 /**
  *
  */
-var address = "0xf11dfa895a213a3eda6ae4bfd434f9818ea10506";
-     
+var address = "0xc85f29edcd5126e588dd3c7fb99908472f631dc9";
+
 window.addEventListener('load', function () {
 	web3 = new Web3(Web3.givenProvider);
 	// Checking if Web3 has been injected by the browser (Mist/MetaMask)

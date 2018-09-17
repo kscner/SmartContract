@@ -9,7 +9,6 @@ interface IMyContract {
 
     event MyEvent(string result);
 
-    function getPlayersInfo() external view returns(int,address,int,address) ;
+    function getPlayersInfo() external view returns(int[],address[]) ;
 
-    function getPlayer2Status() external view returns(int) ;
 }
