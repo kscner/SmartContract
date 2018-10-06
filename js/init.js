@@ -1,7 +1,7 @@
 /**
  *
  */
-var address = "0xc85f29edcd5126e588dd3c7fb99908472f631dc9";
+var address = "0xfa0662d91daf5ebb0c90f36e2975cc5bde75aa70";
 
 window.addEventListener('load', function () {
 	web3 = new Web3(Web3.givenProvider);
@@ -17,4 +17,8 @@ window.addEventListener('load', function () {
 	}
   });
   var contract = web3.eth.contract(abi).at(address);
-  var myEvent = contract.MyEvent({});
+	// var player;
+	// contract.getPlayer(function(error,result){
+	// 	console.log(result);
+	// });
+  //var myEvent = contract.MyEvent({});

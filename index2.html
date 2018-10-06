@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+
+  <title>Hello, world!</title>
+
+  <script type="text/javascript" src="js/web3.min.js"></script>
+<script type="text/javascript" src="js/player.abi.js"></script>
+<script type="text/javascript" src="js/main.contract.abi.js"></script>
+  <script>
+  window.addEventListener('load', function () {
+  	web3 = new Web3(Web3.givenProvider);
+    //web3 = new Web3(web3.currentProvider);
+  	if (typeof web3 !== 'undefined') {
+  	  var provider = web3.currentProvider;
+  	} else {
+  	  console.log('No web3? You should consider trying MetaMask!')
+  	}
+    });
+
+    var mainContractAddress = "0x8300022ed82682db69afb131cd893c2f08830a35";
+    var playerAddress = "0xf5ecb37925d2784d83914d747a039320c55d8cde";
+    var mainContract = web3.eth.contract(main_contract_abi).at(mainContractAddress);
+    var player;
+    mainContract.getPlayer(function(error,result) {
+      if(result==0){
+        console.log("not signup");
+      }else{
+        initPlayer(result);
+      }
+    });
+    function initPlayer(address){
+      var player = web3.eth.contract(player_abi).at(playerAddress);
+    }
+    // var signUpEvent = mainContract.SignUpEvent(function (error,result) {
+    //   console.log(result.args);
+    //   var address = result.args;
+    //   var player =new web3.eth.Contract(player_abi,address);
+    // });
+    //player = web3.eth.contract(player_abi).at("0x43354a5596a032bba222f376f52608e0b742fc5e");
+    //player =new web3.eth.Contract(player_abi,"0x43354a5596a032bba222f376f52608e0b742fc5e");
+    function signUp() {
+      mainContract.signUp("kscner",function (error,result) {
+        //console.log(result);
+      });
+    }
+
+
+    // var gameCreatedEvent = player.GameCreatedEvent(function (error,result) {
+    //   console.log(result.args);
+    // });
+
+    function createGame() {
+    //  console.log(player);
+
+
+      var plaintext = 1;
+      plaintext = web3.utils.asciiToHex(plaintext);
+      plaintext += "00000000000000000000000000000000000000000000000000000000000000";
+      var ciphertext = web3.utils.keccak256(plaintext);
+      var bet = 0.1;
+      player.createGame(ciphertext,function(error,result){
+        if(error){
+          console.error(error);
+        }
+      })
+    }
+
+
+
+  </script>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+      <button class="btn btn-primary" style="width:100%;" id="joinButton" onclick="signUp()"
+      type="button">sign up</button>
+      <br/>
+  <button class="btn btn-primary" style="width:100%;" id="joinButton" onclick="createGame()"
+  type="button">create game</button>
+  <br/>
+  <button class="btn btn-primary" style="width:100%;" id="joinButton" onclick="join()" type="button">join game</button>
+  </div>
+
+
+
+
+
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <script>
+    // myEvent.watch(
+    //   function (error, result) {
+    //     if (!error) {
+    //       console.log(result.args.result);
+    //     } else {
+    //       console.error(error);
+    //     }
+    //   }
+    // );
+
+    function join() {
+      var plaintext = document.forms[0].player1Choise.value;
+      plaintext = web3.utils.asciiToHex(plaintext);
+      plaintext += "00000000000000000000000000000000000000000000000000000000000000";
+      var ciphertext = web3.utils.keccak256(plaintext);
+      var bet = document.forms[0].bet.value;
+      contract.join(ciphertext, { value: web3.utils.toWei(bet, "ether") }, function (error, result) {
+        if (!error) {
+          //console.log(result);
+        } else {
+          console.error(error);
+        }
+      })
+    }
+
+    function joinAndPlay() {
+      var plaintext = document.forms[0].player2Choise.value;
+      if(plaintext==""){
+        alert("please choose one:");
+        return;
+      }
+      plaintext = web3.utils.asciiToHex(plaintext);
+      plaintext += "00000000000000000000000000000000000000000000000000000000000000";
+      var bet = document.forms[0].bet.value;
+      contract.joinAndPlay(plaintext, { value: web3.utils.toWei(bet, "ether") }, function (error, result) {
+        if (!error) {
+          //console.log(result);
+        } else {
+          console.error(error);
+        }
+      })
+    }
+    function play() {
+      var plaintext = document.forms[0].player1Choise.value;
+      plaintext = web3.utils.asciiToHex(plaintext);
+      plaintext += "00000000000000000000000000000000000000000000000000000000000000";
+      contract.play(plaintext, { gas: 99999 }, function (error, result) {
+        if (!error) {
+          //console.log(result);
+        } else {
+          console.error(error);
+        }
+      })
+    }
+  </script>
+</body>
+
+</html>

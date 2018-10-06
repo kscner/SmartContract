@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+
+  <title>Hello, world!</title>
+
+  <script type="text/javascript" src="js/web3.min.js"></script>
+<script type="text/javascript" src="js/player.abi.js"></script>
+<script type="text/javascript" src="js/main.contract.abi.js"></script>
+  <script>
+  window.addEventListener('load', function () {
+  	web3 = new Web3(Web3.givenProvider);
+    //web3 = new Web3(web3.currentProvider);
+  	if (typeof web3 !== 'undefined') {
+  	  var provider = web3.currentProvider;
+  	} else {
+  	  console.log('No web3? You should consider trying MetaMask!')
+  	}
+    });
+    var mainContract;
+    var player;
+    var mainContractAddress = "0x8300022ed82682db69afb131cd893c2f08830a35";
+    mainContract = web3.eth.contract(main_contract_abi).at(mainContractAddress);
+    var playerAddress = "0x746057f2fd5c0d521db10184cb44792dd5456fa5";
+   player = web3.eth.contract(player_abi).at(playerAddress);
+   //player =web3.eth.contract(player_abi,playerAddress);
+    function init(){
+
+   player.createGame("0x01",function(error,result){
+     console.log(result);
+   });
+}
+
+mainContract.getPlayer(function(error,result) {
+  if(result==0){
+    console.log("not signup");
+  }else{
+    //player =new web3.eth.Contract(player_abi,playerAddress);
+    console.log(result);
+init();
+}});
+
+
+
+  </script>
+</head>
+
+<body>
+
+
+</body>
+
+</html>
